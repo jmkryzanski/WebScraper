@@ -9,7 +9,6 @@ then run <b>npm start</b> to start server. The website will be up and running on
 <br>
 <hr>
 It takes some time for server to srape events. If you visit localhost:3000 immediately after the server starts, you may see a sentence telling you to revisit later.
-If you visit localhost:3000 immediately after the server starts, you may see a sentence telling you to revisit later.
 <br>
 <br>
 For testing purposes, after you start the server, you will see a blue chromium icon pop up and start scraping. When the blue chromuim browser is closed, refresh or revisit localhost, and a list of upcoming events will be displayed on the website.
