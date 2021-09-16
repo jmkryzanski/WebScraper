@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Web Scraper</title>
+  </head>
+  <body>
+    <div class="event-list-container">
+      <% for (let i = 0; i < listOfEvents.length; i++) { %>
+      <div class="event-container">
+        <div class="event-title">
+          <a href="<%= listOfEvents[i].linkToOriginalPost %>" class="link-to-original-post" >
+            <%= listOfEvents[i].title %>
+          </a>
+        </div>
+        <div class="event-image">
+          <img src="<%= listOfEvents[i].image %>" alt="Image" />
+        </div>
+        <div class="event-date"><%= listOfEvents[i].dateTime %></div>
+        <div class="organization-name">
+          <a href="<%= listOfEvents[i].organizationLink %>" class="organization-link" >
+            <%= listOfEvents[i].organizationName %>
+          </a>
+        </div>
+      </div>
+      <hr>
+      <br>
+      <% } %>
+    </div>
+    
+  </body>
+</html>
