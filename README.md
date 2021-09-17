@@ -1,6 +1,6 @@
 # WebScraper
 <h4>Clone Repository</h4>
-navigate to a directory in terminal and type <b>git clone https://github.com/ChenYang-Lin/WebScraper.git</b>
+navigate to a directory in terminal and type <b>git clone `https://github.com/ChenYang-Lin/WebScraper.git`</b>
 
 <h4>After Cloning Repository</h4>
 navigate to the root directory. For example <b>cd WebScraper</b>
