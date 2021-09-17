@@ -3,7 +3,7 @@
 navigate to a directory in terminal and type <b>git clone https:<span></span>//github.com/ChenYang-Lin/WebScraper.git</b>
 
 <h4>After Cloning Repository</h4>
-navigate to the root directory. For example <b>cd WebScraper</b>
+navigate to the root directory. In this case <b>cd WebScraper</b>
 <br>
 then run <b>npm i</b> command to install all node modules used in this project.
 <br>
