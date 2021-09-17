@@ -1,9 +1,11 @@
 # WebScraper
+<h4>Clone Repository</h4>
+navigate to a directory in terminal and type <b>git clone https://github.com/ChenYang-Lin/WebScraper.git</b>
 
 <h4>After Cloning Repository</h4>
-At the root directory in terminal. 
+navigate to the root directory. For example <b>cd WebScraper</b>
 <br>
-run <b>npm i</b> command to install all node modules used in this project.
+then run <b>npm i</b> command to install all node modules used in this project.
 <br>
 then run <b>npm start</b> to start server. The website will be up and running on localhost port 3000. So go to <b>http://localhost:3000/</b> to see results.
 <br>
