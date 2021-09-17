@@ -5,9 +5,9 @@ navigate to a directory in terminal and type <b>git clone https:<span></span>//g
 <h4>After Cloning Repository</h4>
 navigate to the root directory. In this case <b>cd WebScraper</b>
 <br>
-then run <b>npm i</b> command to install all node modules used in this project.
+then type <b>npm i</b> command and enter to install all node modules used in this project.
 <br>
-then run <b>npm start</b> to start server. The website will be up and running on localhost port 3000. So go to <b>http://localhost:3000/</b> to see results.
+then type <b>npm start</b> command and enter to start server. The website will be up and running on localhost port 3000. So go to <b>http://localhost:3000/</b> to see results.
 <br>
 <hr>
 It takes some time for server to srape events. If you visit localhost:3000 immediately after the server starts, there is a sentence telling you to revisit later.
