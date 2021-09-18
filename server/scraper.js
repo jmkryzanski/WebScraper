@@ -1,6 +1,5 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
-const cheerio = require("cheerio");
 
 let scrapingList = [
   "https://www.facebook.com/groups/444744689463060/events",
@@ -50,37 +49,48 @@ async function scrapeFacebookEvents(page) {
 
   // Scrape facebook groups one by one from scrapingList
   for (let i = 0; i < scrapingList.length; i++) {
-    await page.goto(scrapingList[i]);
+    await page.goto(scrapingList[i], {
+      waitUntil: "networkidle0"
+    });
 
-    const html = await page.content();
-    const $ = cheerio.load(html);
+    // for testing only, print out any console.log from page.evaluate
+    // page.on('console', msg => {
+    // for (let i = 0; i < msg._args.length; ++i)
+    //   console.log(`${i}: ${msg._args[i]}`);
+    // });
 
-    let UpcomingEventsDiv = $(".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi").eq(0);
-    let numberOfEvents = $(UpcomingEventsDiv).children().length;
+    const resultsFromOneGroup = await page.evaluate(() => {
+      let results = [];
+      const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
+      let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
+      let numberOfEvents = UpcomingEventsElement.children.length;
 
-    // scrape events one by one from current group event list.
-    for (let j = 1; j < numberOfEvents; j++) {
-      // loop starts from 1 because first element of div is title => "Upcoming Events" text container
-      let event;
-      // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
-      if ($(UpcomingEventsDiv).children().eq(j).length < 2) {
-        event = $(UpcomingEventsDiv).children().eq(j).children().eq(0);
-      } else {
-        event = $(UpcomingEventsDiv).children().eq(j);
-      }
+      // scrape events one by one from current group event list.
+      for (let j = 1; j < numberOfEvents; j++) {  
+        // loop starts from 1 because first element of div is title => "Upcoming Events" text container
+        let event;
+        // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
+        if (UpcomingEventsElement.children[j].length < 2) {
+          event = UpcomingEventsElement.children[j].children[0];
+        } else {
+          event = UpcomingEventsElement.children[j]
+        }
 
-      let linkToOriginalPost = $(event).children().eq(0).children().eq(0).attr("href");
-      let image = $(event).children().eq(0).children().eq(0).children().eq(0).css("background-image").replace("url(", "").replace(")", "");
-      let dateTime = $(event).children().eq(1).children().eq(0).children().eq(0).children().eq(0).text();
-      let title = $(event).children().eq(1).children().eq(0).children().eq(1).children().eq(0).children().eq(0).children().eq(0).children().eq(0).text();
-      let organization = $(event).children().eq(1).children().eq(1).children().eq(1).children().eq(0);
-      organizationLink = $(organization).children().eq(0).attr("href");
-      organizationName = $(organization).children().eq(0).children().eq(0).text();
+        let linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
+        let image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
+        let dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
+        let title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
+        let organization = event.children[0].children[1].children[1].children[1].children[0];
+        organizationLink = organization.children[0].getAttribute("href");
+        organizationName = organization.children[0].children[0].innerText;
 
-      singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
+        singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
 
-      scrapingResults.push(singleEvent);
-    } // End for loop for current group event list
+        results.push(singleEvent);
+      } // End for loop for current group event list
+      return results;
+    }) // End page.evaluate
+    scrapingResults = scrapingResults.concat(resultsFromOneGroup);
   } // End for loop for scrapingList
   return scrapingResults;
 }
