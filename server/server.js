@@ -13,7 +13,6 @@ app.get("/", async (req, res) => {
   try {
     // only render index page when there exist any event on listOfEvents object array.
     // console.log(listOfEvents.length);
-    listOfEvents = await scrapEvents();
     if (listOfEvents.length === 0) {
       res.send("no events, try again later");
     } else {
@@ -22,16 +21,16 @@ app.get("/", async (req, res) => {
       });
     }
   } catch (err) {
-    res.send(JSON.stringify(err));
+    res.send(err);
   }
 });
 
 // listen to port 3000 and start initial scraping immediately
 app.listen(process.env.PORT || 3000, async () => {
-  // console.log("app is running on port 3000");
-  // listOfEvents = await scrapEvents();
-  // console.log(listOfEvents);
-  // console.log(listOfEvents.length);
+  console.log("app is running on port 3000");
+  listOfEvents = await scrapEvents();
+  console.log(listOfEvents);
+  console.log(listOfEvents.length);
 });
 
 // Update list of events repeatly by doing new scrapes

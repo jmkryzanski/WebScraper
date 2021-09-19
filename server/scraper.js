@@ -3,8 +3,8 @@ const puppeteer = require("puppeteer");
 
 let scrapingList = [
   "https://www.facebook.com/groups/444744689463060/events",
-  // "https://www.facebook.com/groups/recoveryfriends717/events",
-  // "https://www.facebook.com/groups/292737672143068/events",
+  "https://www.facebook.com/groups/recoveryfriends717/events",
+  "https://www.facebook.com/groups/292737672143068/events",
   // "https://www.facebook.com/gloriousrecovery/events",
 ];
 
