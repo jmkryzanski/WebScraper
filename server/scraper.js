@@ -3,8 +3,8 @@ const puppeteer = require("puppeteer");
 
 let scrapingList = [
   "https://www.facebook.com/groups/444744689463060/events",
-  "https://www.facebook.com/groups/recoveryfriends717/events",
-  "https://www.facebook.com/groups/292737672143068/events",
+  // "https://www.facebook.com/groups/recoveryfriends717/events",
+  // "https://www.facebook.com/groups/292737672143068/events",
   // "https://www.facebook.com/gloriousrecovery/events",
 ];
 
@@ -12,14 +12,14 @@ let scrapEvents = async () => {
   console.log("running scapEvents function");
 
   const browser = await puppeteer.launch({
-    headless: true,
-    defaultViewport: null,
-    args: [
-      "--incognito",
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote"
-    ],
+    headless: false,
+    // defaultViewport: null,
+    // args: [
+    //   "--incognito",
+    //   "--no-sandbox",
+    //   "--single-process",
+    //   "--no-zygote"
+    // ],
   });
   const page = await browser.newPage();
 
