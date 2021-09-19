@@ -22,7 +22,7 @@ app.get("/", async (req, res) => {
       });
     }
   } catch (err) {
-    res.send("Error");
+    res.send(err);
   }
 });
 
