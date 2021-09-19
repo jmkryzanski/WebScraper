@@ -18,10 +18,8 @@ let scrapEvents = async () => {
 
   // Login
   await loginFacebook(page);
-
   // Scrapping
-  let scrapingResults = await scrapeFacebookEvents(page);
-
+  let scrapingResults = await scrapeFacebookEvents(browser, page);
   // close browser
   await browser.close();
 
@@ -43,7 +41,7 @@ async function loginFacebook(page) {
   await page.waitForNavigation({ waitUntil: "networkidle0" });
 }
 
-async function scrapeFacebookEvents(page) {
+async function scrapeFacebookEvents(browser, page) {
   let singleEvent;
   let scrapingResults = [];
 
@@ -52,15 +50,9 @@ async function scrapeFacebookEvents(page) {
     await page.goto(scrapingList[i], {
       waitUntil: "networkidle0"
     });
-
-    // for testing only, print out any console.log from page.evaluate
-    // page.on('console', msg => {
-    // for (let i = 0; i < msg._args.length; ++i)
-    //   console.log(`${i}: ${msg._args[i]}`);
-    // });
-
-    const resultsFromOneGroup = await page.evaluate(() => {
-      let results = [];
+    // Ineract with the page directly in the page DOM environment
+    const basicInfosFromOneGroup = await page.evaluate(() => {
+      let basicResults = [];
       const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
       let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
       let numberOfEvents = UpcomingEventsElement.children.length;
@@ -75,7 +67,7 @@ async function scrapeFacebookEvents(page) {
         } else {
           event = UpcomingEventsElement.children[j]
         }
-
+        // scrape data based on the structure of Facebook page.
         let linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
         let image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
         let dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
@@ -83,17 +75,63 @@ async function scrapeFacebookEvents(page) {
         let organization = event.children[0].children[1].children[1].children[1].children[0];
         organizationLink = organization.children[0].getAttribute("href");
         organizationName = organization.children[0].children[0].innerText;
-
+        
         singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
 
-        results.push(singleEvent);
+        basicResults.push(singleEvent);
       } // End for loop for current group event list
-      return results;
-    }) // End page.evaluate
+      return basicResults;
+    },) // End page.evaluate
+
+    let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
   } // End for loop for scrapingList
   return scrapingResults;
 }
 
+// Scrape more information for events from a group.
+async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
+  let resultsFromOneGroup = [];
+  // one by one for each event from current group.
+  for (let i = 0; i < basicInfosFromOneGroup.length; i++) {
+    // create new page and navigate to the original post of current event to scrape more information
+    const pageForOriginalPost = await browser.newPage();
+    await pageForOriginalPost.goto(basicInfosFromOneGroup[i].linkToOriginalPost, {
+      waitUntil: "networkidle0"
+    });
+    
+    // Scrape - ineract with the page directly in the page DOM environment
+    const resultsFromOneEvent = await pageForOriginalPost.evaluate(async (pageForOriginalPost) => {
+      const headingElement = document.querySelector(".k4urcfbm.nqmvxvec").children[0].children[0].children[0].children[0];
+      let detailDateTime = headingElement.children[0].children[0].children[0].innerText;
+      let address = headingElement.children[2].children[0].innerText;
+
+      // description element - if some descriptions are hidden, scraper will click the "see more button" to expand the description
+      const detailsElement = document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode;
+      let seeMoreBtn;
+      if (detailsElement.lastChild.children[0].children[0].childNodes.length > 2) {
+        seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0];
+        await seeMoreBtn.click();
+      }
+      let description = detailsElement.lastChild.children[0].children[0].innerText;
+
+      return { detailDateTime, address, description };
+    });
+    // Combine "basic" data from group page and "additional" data from original post of the event
+    let basicInfoOfCurrEvent = basicInfosFromOneGroup[i];
+    let moreInfoOfCurrEvent = { detailDateTime: resultsFromOneEvent.detailDateTime, address: resultsFromOneEvent.address, description: resultsFromOneEvent.description };
+    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent}
+    resultsFromOneGroup.push(infoOfCurrEvent);
+    await pageForOriginalPost.close();
+  }
+  return resultsFromOneGroup;
+}
+
 // export functions
 module.exports = { scrapEvents };
+
+// for testing only, print out any console.log from page.evaluate
+// page.on('console', msg => {
+// for (let i = 0; i < msg._args.length; ++i)
+//   console.log(`${i}: ${msg._args[i]}`);
+// });

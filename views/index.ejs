@@ -11,20 +11,23 @@
     <div class="event-list-container">
       <% for (let i = 0; i < listOfEvents.length; i++) { %>
       <div class="event-container">
-        <div class="event-title">
+        <h1 class="event-title">
           <a href="<%= listOfEvents[i].linkToOriginalPost %>" class="link-to-original-post" >
             <%= listOfEvents[i].title %>
           </a>
-        </div>
+        </h1>
         <div class="event-image">
           <img src="<%= listOfEvents[i].image %>" alt="Image" />
         </div>
-        <div class="event-date"><%= listOfEvents[i].dateTime %></div>
-        <div class="organization-name">
+        <h3 class="event-date">Date & Time: <%= listOfEvents[i].detailDateTime %></h3>
+        <h3 class="organization-name">
+          Organization: 
           <a href="<%= listOfEvents[i].organizationLink %>" class="organization-link" >
             <%= listOfEvents[i].organizationName %>
           </a>
-        </div>
+        </h3>
+        <h3 class="address">Address: <%= listOfEvents[i].address %></h3>
+        <div class="description">Description: <%= listOfEvents[i].description %></div>
       </div>
       <hr>
       <br>
