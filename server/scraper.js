@@ -13,13 +13,11 @@ let scrapEvents = async () => {
 
   const browser = await puppeteer.launch({
     headless: false,
-    // defaultViewport: null,
-    // args: [
-    //   "--incognito",
-    //   "--no-sandbox",
-    //   "--single-process",
-    //   "--no-zygote"
-    // ],
+    defaultViewport: null,
+    args: [
+      "--no-sandbox",
+      '--disable-setuid-sandbox',
+    ],
   });
   const page = await browser.newPage();
 

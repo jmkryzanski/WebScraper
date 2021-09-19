@@ -5,21 +5,24 @@ const cron = require("node-cron");
 let { scrapEvents } = require("./scraper.js");
 
 let listOfEvents = [];
-let message;
 
 // Register view engine
 app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
-  // only render index page when there exist any event on listOfEvents object array.
-  // console.log(listOfEvents.length);
-  listOfEvents = await scrapEvents();
-  if (listOfEvents.length === 0) {
-    res.send("no events, try again later");
-  } else {
-    res.render("index", {
-      listOfEvents,
-    });
+  try {
+    // only render index page when there exist any event on listOfEvents object array.
+    // console.log(listOfEvents.length);
+    listOfEvents = await scrapEvents();
+    if (listOfEvents.length === 0) {
+      res.send("no events, try again later");
+    } else {
+      res.render("index", {
+        listOfEvents,
+      });
+    }
+  } catch (err) {
+    res.send("Error");
   }
 });
 
