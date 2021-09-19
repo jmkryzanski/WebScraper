@@ -18,7 +18,3 @@ For testing purposes, when the server starts, there will be a blue chromium icon
 <br>
 Keep in mind that there may have multiple blue chromuim brosers running at the same time. This is normal because we scheduled to run a scraping every minute for testing purposes. As long you don't manually close the browser, everything will proceed normally.
 
-<br>
-<br>
-<h5>heroky deployment (test only)</h5>
-https://cs410-web-scraper.herokuapp.com/
