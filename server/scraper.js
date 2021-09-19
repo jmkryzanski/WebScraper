@@ -12,7 +12,7 @@ let scrapEvents = async () => {
   console.log("running scapEvents function");
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
   });
   const page = await browser.newPage();
 
