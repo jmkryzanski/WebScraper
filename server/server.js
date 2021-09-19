@@ -5,6 +5,7 @@ const cron = require("node-cron");
 let { scrapEvents } = require("./scraper.js");
 
 let listOfEvents = [];
+let message = "no events, try again later";
 
 // Register view engine
 app.set("view engine", "ejs");
@@ -13,7 +14,7 @@ app.get("/", async (req, res) => {
   // only render index page when there exist any event on listOfEvents object array.
   // console.log(listOfEvents.length);
   if (listOfEvents.length === 0) {
-    res.send("no events, try again later");
+    res.send(message);
   } else {
     res.render("index", {
       listOfEvents,
@@ -24,6 +25,7 @@ app.get("/", async (req, res) => {
 // listen to port 3000 and start initial scraping immediately
 app.listen(process.env.PORT || 3000, async () => {
   console.log("app is running on port 3000");
+  message = "scraping...";
   listOfEvents = await scrapEvents();
   console.log(listOfEvents);
   console.log(listOfEvents.length);
