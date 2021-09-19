@@ -30,23 +30,23 @@ app.listen(process.env.PORT || 3000, async () => {
 });
 
 // Update list of events repeatly by doing new scrapes
-cron.schedule("* * * * *", async () => {
-  console.log("running a task every minute");
-  listOfEvents = await scrapEvents();
-  console.log(listOfEvents);
-  console.log(listOfEvents.length);
-});
+// cron.schedule("* * * * *", async () => {
+//   console.log("running a task every minute");
+//   listOfEvents = await scrapEvents();
+//   console.log(listOfEvents);
+//   console.log(listOfEvents.length);
+// });
 
-// cron.schedule(
-//   "0 1 * * *",
-//   async () => {
-//     console.log("Running a job at 01:00 at America/New_York timezone");
-//     listOfEvents = await scrapEvents();
-//     console.log(listOfEvents);
-//     console.log(listOfEvents.length);
-//   },
-//   {
-//     scheduled: true,
-//     timezone: "America/New_York",
-//   }
-// );
+cron.schedule(
+  "0 1 * * *",
+  async () => {
+    console.log("Running a job at 01:00 at America/New_York timezone");
+    listOfEvents = await scrapEvents();
+    console.log(listOfEvents);
+    console.log(listOfEvents.length);
+  },
+  {
+    scheduled: true,
+    timezone: "America/New_York",
+  }
+);
