@@ -25,7 +25,7 @@ app.get("/", async (req, res) => {
 // listen to port 3000 and start initial scraping immediately
 app.listen(process.env.PORT || 3000, async () => {
   console.log("app is running on port 3000");
-  message = "scraping...";
+  // message = "scraping...";
   listOfEvents = await scrapEvents();
   console.log(listOfEvents);
   console.log(listOfEvents.length);
