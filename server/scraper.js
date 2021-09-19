@@ -12,8 +12,7 @@ let scrapEvents = async () => {
   console.log("running scapEvents function");
 
   const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: null,
+    headless: true,
     args: [
       "--no-sandbox",
       '--disable-setuid-sandbox',
